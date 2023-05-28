@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 import med.voll.api.endereco.Endereco;
 
 @Table(name = "pacientes")
-//@Entity(name = "Paciente")
+@Entity(name = "Paciente")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,6 +28,13 @@ public class Paciente {
 	private String telefone;
 	@Embedded
 	private Endereco endereco;
-	
 
+
+	public Paciente(DadosCadastroPaciente dados) {
+		this.nome = dados.nome();
+		this.email = dados.email();
+		this.cpf = dados.cpf();
+		this.telefone = dados.telefone();
+		this.endereco = new Endereco(dados.endereco());
+	}
 }

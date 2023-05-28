@@ -1,5 +1,9 @@
 package med.voll.api.controller;
 
+import med.voll.api.Datasouce.PacienteRepository;
+import med.voll.api.Model.paciente.Paciente;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,10 +14,12 @@ import med.voll.api.Model.paciente.DadosCadastroPaciente;
 @RestController
 @RequestMapping("/pacientes")
 public class PacienteController {
+	@Autowired
+	private PacienteRepository repository;
 	@PostMapping
+	@Transactional
 	public void cadastra(@RequestBody DadosCadastroPaciente dados) {
-		
-		System.out.println(dados);
+		repository.save(new Paciente(dados));
 	}
 
 }

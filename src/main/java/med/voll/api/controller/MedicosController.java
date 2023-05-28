@@ -1,6 +1,7 @@
 package med.voll.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ public class MedicosController {
 	private MedicoRepository repository;
 	
 	@PostMapping
+	@Transactional
 	public void cadastra(@RequestBody DadosCadastroMedico dados) //com Resquest Body eu pego as informações quem vem no corpo da requisição post
 	{
 		repository.save( new Medico(dados));
