@@ -28,13 +28,21 @@ public class PacienteController {
 		repository.save(new Paciente(dados));
 	}
 	@GetMapping
-	public Page<DadosListagemPaciente> listarTodos( @PageableDefault( size = 2 , sort = {"nome"}) Pageable paginacao){
-			return repository.findAll(paginacao).map(DadosListagemPaciente::new);
+	public Page<DadosListagemPaciente> listarTodos( @PageableDefault( size = 5 , sort = {"nome"}) Pageable paginacao){
+			return repository.findAllByAtivoTrue(paginacao).map(DadosListagemPaciente::new);
 	}
 	@PutMapping
 	@Transactional
 	public void atualizar(@RequestBody DadosAtualizarPaciente dados){
+		var paciente = repository.getReferenceById(dados.id());
+		paciente.atualizarPaciente(dados);
 
+	}
+	@DeleteMapping("{id}")
+	@Transactional
+	public void Apagar(@PathVariable Long id){
+		var paciente = repository.getReferenceById(id);
+		paciente.excluir();
 	}
 
 }

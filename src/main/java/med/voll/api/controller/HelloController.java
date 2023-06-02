@@ -12,7 +12,7 @@ public class HelloController {
 	@GetMapping		//tipo de requisição
 	
 	public String hello() {
-		return "<h1>Hello World</h1>";
+		return "<h6>Hello World</h6>";
 	}
 	
 
