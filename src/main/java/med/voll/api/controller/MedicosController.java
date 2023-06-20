@@ -2,16 +2,15 @@ package med.voll.api.controller;
 
 import jakarta.validation.Valid;
 import med.voll.api.Datasouce.MedicoRepository;
-import med.voll.api.Model.medico.DadosAtualizarMedico;
-import med.voll.api.Model.medico.DadosCadastroMedico;
-import med.voll.api.Model.medico.DadosListagemMedico;
-import med.voll.api.Model.medico.Medico;
+import med.voll.api.domain.medico.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/medicos")
@@ -22,30 +21,43 @@ public class MedicosController {
 	
 	@PostMapping
 	@Transactional
-	public void cadastra(@RequestBody @Valid DadosCadastroMedico dados) //com ResquestBody eu pego as informações quem vem no corpo da requisição post
+	public ResponseEntity cadastra(@RequestBody @Valid DadosCadastroMedico dados , UriComponentsBuilder uriBuilder)
 	{
-		repository.save( new Medico(dados));
+		var medico =  new Medico(dados);
+		repository.save(medico);
+		var uri = uriBuilder.path("medicos/{id}").buildAndExpand(medico.getId()).toUri();
+
+		return ResponseEntity.created(uri).body(new DadosDetalhamentoMedico(medico));
 	}
 	@GetMapping
-	public Page<DadosListagemMedico> listarTodos(@PageableDefault(size = 10,sort={"nome"}) Pageable paginacao){
-		//quando não utilizamos paginação : return repository.findAll().stream().map(DadosListagemMedico::new).toList();
-		// Retorna todos os médicos, faz um stream na lista,
-		// aplica um map transformando Medico em DadosListagemMedico e transforma tudo em uma lista novamente
-		return repository.findAllByAtivoTrue(paginacao).map(DadosListagemMedico::new);
+	public ResponseEntity<Page<DadosListagemMedico>>listarTodos(@PageableDefault(size = 10,sort={"nome"}) Pageable paginacao){
 
+		var page = repository.findAllByAtivoTrue(paginacao).map(DadosListagemMedico::new);
+
+		return ResponseEntity.ok(page);
+
+	}
+	@GetMapping("{id}")
+
+	public ResponseEntity listarUm(@PathVariable Long id){
+		var medico = repository.getReferenceByIdAndAtivoTrue(id);
+		return ResponseEntity.ok(new DadosDetalhamentoMedico(medico));
 	}
 	@PutMapping
 	@Transactional
-	public void atualizar(@RequestBody  DadosAtualizarMedico dados){
-		var medico = repository.getReferenceById(dados.id());
+	public ResponseEntity atualizar(@RequestBody  DadosAtualizarMedico dados){
+		var medico = repository.getReferenceByIdAndAtivoTrue(dados.id());
 		medico.atualizarRegistro(dados);
+		return ResponseEntity.ok(new DadosDetalhamentoMedico(medico));
 
 	}
 	@DeleteMapping("{id}")
 	@Transactional
-	public void Apagar(@PathVariable Long id){
+	public ResponseEntity Apagar(@PathVariable Long id){
 		var medico = repository.getReferenceById(id);
 		medico.excluir();
+
+		return ResponseEntity.noContent().build();
 	}
 
 }
