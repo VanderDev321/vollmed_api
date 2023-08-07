@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequestMapping("/medicos")
 public class MedicosController {
@@ -30,7 +32,7 @@ public class MedicosController {
 		return ResponseEntity.created(uri).body(new DadosDetalhamentoMedico(medico));
 	}
 	@GetMapping
-	public ResponseEntity<Page<DadosListagemMedico>>listarTodos(@PageableDefault(size = 10,sort={"nome"}) Pageable paginacao){
+	public ResponseEntity<Page<DadosListagemMedico>>listarTodos(@PageableDefault(size = 10,sort={"id"}) Pageable paginacao){
 
 		var page = repository.findAllByAtivoTrue(paginacao).map(DadosListagemMedico::new);
 
@@ -41,6 +43,7 @@ public class MedicosController {
 
 	public ResponseEntity listarUm(@PathVariable Long id){
 		var medico = repository.getReferenceByIdAndAtivoTrue(id);
+
 		return ResponseEntity.ok(new DadosDetalhamentoMedico(medico));
 	}
 	@PutMapping

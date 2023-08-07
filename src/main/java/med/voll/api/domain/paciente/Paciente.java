@@ -1,20 +1,17 @@
 package med.voll.api.domain.paciente;
 
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+import med.voll.api.domain.consulta.Consulta;
 import med.voll.api.domain.endereco.Endereco;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "pacientes")
 @Entity(name = "Paciente")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -29,6 +26,8 @@ public class Paciente {
 	@Embedded
 	private Endereco endereco;
 	private boolean ativo;
+	@OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+	private List<Consulta> consultasAgendadas = new ArrayList<>();
 
 
 	public Paciente(DadosCadastroPaciente dados) {
