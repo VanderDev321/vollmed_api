@@ -10,23 +10,26 @@ import med.voll.api.domain.consulta.DadosDetalhamentoConsulta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping( "/consultas")
 public class ConsultaController {
     @Autowired
     private AgendaDeConsulta agenda;
+    @Autowired
+    private ConsultaRepository repository;
 
     @PostMapping
     @Transactional
     public ResponseEntity agendar(@RequestBody @Valid DadosAgendamentoConsulta dados){
+        var consulta =agenda.agendar(dados);
 
-        agenda.agendar(dados);
 
-
-        return ResponseEntity.ok(new DadosDetalhamentoConsulta(null,null,null,null));
+        return ResponseEntity.ok(consulta);
 
     }
+
     @DeleteMapping
     @Transactional
     public ResponseEntity cancelar(@RequestBody @Valid DadosCancelamentoConsulta dados){

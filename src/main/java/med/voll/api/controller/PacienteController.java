@@ -33,7 +33,7 @@ public class PacienteController {
 		return ResponseEntity.ok(new DadosDetalhamentoPaciente(paciente));
 	}
 	@GetMapping
-	public ResponseEntity<Page<DadosListagemPaciente>> listarTodos( @PageableDefault( size = 5 , sort = {"nome"}) Pageable paginacao){
+	public ResponseEntity<Page<DadosListagemPaciente>> listarTodos( @PageableDefault( size = 20 , sort = {"nome"}) Pageable paginacao){
 			var page = repository.findAllByAtivoTrue(paginacao).map(DadosListagemPaciente::new);
 
 			return ResponseEntity.ok(page);

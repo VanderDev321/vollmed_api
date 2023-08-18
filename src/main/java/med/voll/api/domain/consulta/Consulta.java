@@ -31,6 +31,15 @@ public class Consulta {
     private MotivoCancelamento motivoCancelamento;
     private Boolean ativo;
 
+    public Consulta(Medico medico, Paciente paciente, LocalDateTime data) {
+        this.id = null;
+        this.medico = medico;
+        this.paciente = paciente;
+        this.data = data;
+        this.ativo = true;
+        this.motivoCancelamento = null;
+    }
+
     public void cancelar(MotivoCancelamento motivo){
         this.motivoCancelamento = motivo;
         this.ativo = false;
