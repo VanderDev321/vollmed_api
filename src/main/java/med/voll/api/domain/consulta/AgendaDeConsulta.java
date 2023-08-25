@@ -4,7 +4,7 @@ import med.voll.api.Datasouce.ConsultaRepository;
 import med.voll.api.Datasouce.MedicoRepository;
 import med.voll.api.Datasouce.PacienteRepository;
 import med.voll.api.domain.consulta.validacoes.ValidacaoException;
-import med.voll.api.domain.consulta.validacoes.ValidadorAgendamento;
+import med.voll.api.domain.consulta.validacoes.agendamento.ValidadorAgendamento;
 
 import med.voll.api.domain.consulta.validacoes.cancelamento.ValidadorCancelamento;
 import med.voll.api.domain.medico.Medico;
