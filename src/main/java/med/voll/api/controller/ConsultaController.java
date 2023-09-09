@@ -27,7 +27,6 @@ public class ConsultaController {
     public ResponseEntity agendar(@RequestBody @Valid DadosAgendamentoConsulta dados){
         var consulta =agenda.agendar(dados);
 
-
         return ResponseEntity.ok(consulta);
 
     }
